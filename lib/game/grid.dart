@@ -1,5 +1,8 @@
 import 'dart:math';
 
+/// Callback for tetris line clear events.
+typedef LinesClearedCallback = void Function(List<int> rows);
+
 import 'block.dart';
 import 'block_type.dart';
 
@@ -23,7 +26,9 @@ class Grid {
   bool gameOver = false;
   bool victory = false;
 
-  Grid() {
+  final LinesClearedCallback? onTetris;
+
+  Grid({this.onTetris}) {
     spawnBlock();
   }
 
@@ -73,10 +78,12 @@ class Grid {
 
   void clearLines() {
     int cleared = 0;
+    List<int> clearedRows = [];
     for (int y = 0; y < rows; y++) {
       if (cells[y].every((cell) => cell != null)) {
         cells.removeAt(y);
         cells.insert(0, List.filled(columns, null));
+        clearedRows.add(y);
         cleared++;
       }
     }
@@ -88,6 +95,9 @@ class Grid {
       linesCleared += cleared;
       if (level >= 100) {
         victory = true;
+      }
+      if (cleared == 4) {
+        onTetris?.call(List<int>.from(clearedRows));
       }
     }
   }
