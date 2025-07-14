@@ -1,10 +1,9 @@
 import 'dart:math';
+import 'block.dart';
+import 'block_type.dart';
 
 /// Callback for tetris line clear events.
 typedef LinesClearedCallback = void Function(List<int> rows);
-
-import 'block.dart';
-import 'block_type.dart';
 
 /// Manages the Blocks grid state, block placement, line clearing, and scoring.
 class Grid {
