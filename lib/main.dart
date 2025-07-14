@@ -1,5 +1,6 @@
 import 'dart:html' as html;
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,6 +44,7 @@ class _BlocksGamePageState extends State<BlocksGamePage>
   late BlcoksGame game;
   final FocusNode _focusNode = FocusNode();
   List<int>? _tetrisRows;
+  final AudioPlayer _tetrisPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -55,6 +57,7 @@ class _BlocksGamePageState extends State<BlocksGamePage>
   @override
   void dispose() {
     game.dispose();
+    _tetrisPlayer.dispose();
     super.dispose();
   }
 
@@ -68,6 +71,11 @@ class _BlocksGamePageState extends State<BlocksGamePage>
   }
 
   void _handleTetris(List<int> rows) {
+    _tetrisPlayer.play(AssetSource('sound/thunder.mp3'));
+    Future.delayed(const Duration(seconds: 1), () {
+      _tetrisPlayer.stop();
+    });
+
     setState(() {
       _tetrisRows = rows;
     });
