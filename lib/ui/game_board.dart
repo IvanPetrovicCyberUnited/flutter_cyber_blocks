@@ -7,11 +7,13 @@ import '../game/grid.dart';
 class GameBoard extends StatelessWidget {
   final Grid grid;
   final double blockSize;
+  final List<int>? highlightRows;
 
   const GameBoard({
     Key? key,
     required this.grid,
     this.blockSize = 20.0,
+    this.highlightRows,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,27 @@ class GameBoard extends StatelessWidget {
               for (int x = 0; x < grid.currentBlock!.shape[y].length; x++)
                 if (grid.currentBlock!.shape[y][x] == 1)
                   _buildFallingBlock(x, y, blockSize),
+
+          if (highlightRows != null)
+            for (final row in highlightRows!)
+              Positioned(
+                left: 0,
+                top: row * blockSize,
+                child: Container(
+                  width: Grid.columns * blockSize,
+                  height: blockSize,
+                  decoration: BoxDecoration(
+                    color: Colors.orangeAccent.withOpacity(0.6),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.orangeAccent,
+                        blurRadius: 8,
+                        spreadRadius: 2,
+                      )
+                    ],
+                  ),
+                ),
+              ),
         ],
       ),
     );

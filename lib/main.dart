@@ -42,11 +42,13 @@ class _BlocksGamePageState extends State<BlocksGamePage>
     with SingleTickerProviderStateMixin {
   late BlcoksGame game;
   final FocusNode _focusNode = FocusNode();
+  List<int>? _tetrisRows;
 
   @override
   void initState() {
     super.initState();
-    game = BlcoksGame(this, onUpdate: () => setState(() {}));
+    game = BlcoksGame(this,
+        onUpdate: () => setState(() {}), onTetris: _handleTetris);
     game.bind();
   }
 
@@ -59,8 +61,22 @@ class _BlocksGamePageState extends State<BlocksGamePage>
   void _restartGame() {
     game.dispose();
     setState(() {
-      game = BlcoksGame(this, onUpdate: () => setState(() {}));
+      game = BlcoksGame(this,
+          onUpdate: () => setState(() {}), onTetris: _handleTetris);
       // Do NOT call game.bind() or create another ticker
+    });
+  }
+
+  void _handleTetris(List<int> rows) {
+    setState(() {
+      _tetrisRows = rows;
+    });
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        setState(() {
+          _tetrisRows = null;
+        });
+      }
     });
   }
 
@@ -201,6 +217,7 @@ class _BlocksGamePageState extends State<BlocksGamePage>
                         child: GameBoard(
                           grid: game.grid,
                           blockSize: blockSize,
+                          highlightRows: _tetrisRows,
                         ),
                       ),
                     ),

@@ -12,10 +12,12 @@ class BlcoksGame {
   double _accumulator = 0.0;
 
   VoidCallback? onUpdate;
+  final LinesClearedCallback? onTetris;
   bool isPaused = false;
   Duration _pauseAt = Duration.zero;
 
-  BlcoksGame(TickerProvider vsync, {this.onUpdate}) : grid = Grid() {
+  BlcoksGame(TickerProvider vsync, {this.onUpdate, this.onTetris})
+      : grid = Grid(onTetris: onTetris) {
     _ticker = vsync.createTicker(tick);
     _ticker.muted = false;
     _ticker.start();
